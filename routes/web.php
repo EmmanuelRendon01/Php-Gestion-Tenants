@@ -35,6 +35,8 @@ foreach (config('tenancy.central_domains') as $domain) {
 
             Route::get('/tenants', [TenantController::class, 'index'])->name('tenants');
 
+            Route::post('/tenants', [TenantController::class, 'store'])->name('tenants.store');
+
         });
 
     });
