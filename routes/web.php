@@ -33,14 +33,7 @@ foreach (config('tenancy.central_domains') as $domain) {
                 return view('dashboard');
             })->name('dashboard');
 
-            Route::get('/tenants', function () {
-                return view('tenants');
-            })->name('tenants');
-
-
-            Route::post('/store', [TenantController::class, 'store'])->name('tenant.store');
-
-            Route::get('/index', [TenantController::class, 'index'])->name('tenant.index');
+            Route::get('/tenants', [TenantController::class, 'index'])->name('tenants');
 
         });
 

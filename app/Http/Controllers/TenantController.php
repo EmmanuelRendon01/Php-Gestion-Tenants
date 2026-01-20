@@ -12,7 +12,7 @@ class TenantController extends Controller
      */
     public function index()
     {
-        $tenant = Tenant::latest();
+        $tenants = Tenant::latest()->get(); 
         return view('tenants', compact('tenants'));
     }
 

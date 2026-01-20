@@ -11,18 +11,30 @@
             <table class="table">
                 <thead>
                     <tr>
-                    <th scope="col">Tenant</th>
-                    <th scope="col">Dominio</th>
-                    <th scope="col">Created At</th>
-                    <th scope="col">Updated At</th>
+                        <th scope="col">Tenant (ID)</th>
+                        <th scope="col">Dominio</th>
+                        <th scope="col">Created At</th>
+                        <th scope="col">Updated At</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tenants as $tenant)
-                    <tr>
-                        <td>{{ $tenant->domains->first()->domain ?? 'Sin dominio' }}</td>
-                        <td>Otto</td>
-                    </tr>
+                    @forelse ($tenants as $tenant)
+                        <tr>
+                            <td>{{ $tenant->id }}</td>
+                            <td>
+                                {{ $tenant->domains->first()->domain ?? 'Sin dominio asignado' }}
+                            </td>
+                            <td>{{ $tenant->created_at->format('d/m/Y H:i') }}</td>
+                            <td>{{ $tenant->updated_at->format('d/m/Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        {{-- Esto se mostrará si NO hay registros --}}
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                No hay tenants registrados.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
             
