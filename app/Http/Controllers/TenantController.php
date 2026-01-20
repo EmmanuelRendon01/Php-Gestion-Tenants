@@ -36,6 +36,8 @@ class TenantController extends Controller
         ]);
 
         $tenant->domains()->create(['domain' => $request->domain. '.localhost']);
+
+        return redirect()->route('tenants');
     }
 
     /**
