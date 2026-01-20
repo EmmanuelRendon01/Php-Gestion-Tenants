@@ -1,0 +1,97 @@
+# ====================
+# Laravel
+# ====================
+/vendor
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# ====================
+# Environment
+# ====================
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+
+# ====================
+# IDE & Editors
+# ====================
+/.idea
+/.vscode
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ====================
+# OS Files
+# ====================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ====================
+# Logs
+# ====================
+*.log
+storage/logs/*.log
+
+# ====================
+# Cache & Compiled
+# ====================
+/bootstrap/cache/*.php
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# ====================
+# Testing
+# ====================
+/coverage
+.phpunit.cache
+/tests/Browser/console
+/tests/Browser/screenshots
+
+# ====================
+# Build & Dependencies
+# ====================
+/public/build/
+/public/css/
+/public/js/
+mix-manifest.json
+
+# ====================
+# Docker
+# ====================
+.docker
+
+# ====================
+# Multi-Tenancy
+# ====================
+/storage/tenant*
+
+# ====================
+# Auth & Security
+# ====================
+auth.json
+*.pem
+*.key
+*.crt
+
+# ====================
+# Misc
+# ====================
+.vagrant
+/.fleet
+.phpactor.json
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php

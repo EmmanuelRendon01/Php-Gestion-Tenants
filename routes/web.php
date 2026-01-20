@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TenantController;
+
+/*
+|--------------------------------------------------------------------------
+| Rutas Centrales
+|--------------------------------------------------------------------------
+|
+| Estas rutas solo son accesibles desde tus dominios principales
+| (definidos en config/tenancy.php). No funcionarán en los
+| subdominios de los inquilinos (tenants).
+|
+*/
+
+foreach (config('tenancy.central_domains') as $domain) {
+    Route::domain($domain)->group(function () {
+        
+        // 1. Ruta de bienvenida (Landing Page)
+        Route::get('/', function () {
+            return view('welcome');
+        });
+
+        // 2. Rutas protegidas por autenticación (Jetstream / Dashboard Central)
+        Route::middleware([
+            'auth:sanctum',
+            config('jetstream.auth_session'),
+            'verified',
+        ])->group(function () {
+
+            Route::get('/dashboard', function () {
+                return view('dashboard');
+            })->name('dashboard');
+
+            Route::get('/tenants', function () {
+                return view('tenants');
+            })->name('tenants');
+
+
+            Route::post('/store', [TenantController::class, 'store'])->name('tenant.store');
+
+            Route::get('/index', [TenantController::class, 'index'])->name('tenant.index');
+
+        });
+
+    });
+}
