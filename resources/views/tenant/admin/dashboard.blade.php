@@ -1,4 +1,4 @@
-@extends('tenant.layout')
+@extends('tenant.admin.layout')
 
 @section('content')
 <div class="container">
@@ -17,7 +17,7 @@
                         <i class="bi bi-box-seam"></i> Productos
                     </h5>
                     <p class="card-text display-4">{{ \App\Models\Product::count() }}</p>
-                    <a href="{{ route('tenant.products') }}" class="btn btn-light">Ver Inventario</a>
+                    <a href="{{ route('tenant.admin.products') }}" class="btn btn-light">Ver Inventario</a>
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->get();
-        return view('tenant.products', compact('products'));
+        return view('tenant.admin.products', compact('products'));
     }
 
     /**
@@ -33,7 +33,7 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
-        return redirect()->route('tenant.products')->with('success', 'Producto creado exitosamente');
+        return redirect()->route('tenant.admin.products')->with('success', 'Producto creado exitosamente');
     }
 
     /**
@@ -80,7 +80,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('tenant.products')->with('success', 'Producto actualizado exitosamente');
+        return redirect()->route('tenant.admin.products')->with('success', 'Producto actualizado exitosamente');
     }
 
     /**
@@ -89,6 +89,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('tenant.products')->with('success', 'Producto eliminado exitosamente');
+        return redirect()->route('tenant.admin.products')->with('success', 'Producto eliminado exitosamente');
     }
 }

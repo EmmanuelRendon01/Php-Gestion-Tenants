@@ -79,6 +79,8 @@
                     </div>
                     
                     <div class="modal-body">
+                        <h6 class="mb-3 text-primary">Información del Tenant</h6>
+                        
                         <div class="mb-3">
                             <label for="empresa" class="form-label">Identificador (ID)</label>
                             <input type="text" class="form-control" id="empresa" name="empresa" required placeholder="cliente_01">
@@ -86,8 +88,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" required placeholder="admin@empresa.com">
+                            <label for="email" class="form-label">Correo Electrónico del Tenant</label>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="contacto@empresa.com">
                         </div>
 
                         <div class="mb-3">
@@ -96,6 +98,26 @@
                                 <input type="text" class="form-control" id="domain" name="domain" required placeholder="mi-empresa">
                                 <span class="input-group-text">.localhost</span>
                             </div>
+                        </div>
+
+                        <hr class="my-4">
+                        
+                        <h6 class="mb-3 text-primary">Usuario Administrador</h6>
+                        
+                        <div class="mb-3">
+                            <label for="admin_name" class="form-label">Nombre del Administrador</label>
+                            <input type="text" class="form-control" id="admin_name" name="admin_name" required placeholder="Juan Pérez">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="admin_email" class="form-label">Email del Administrador</label>
+                            <input type="email" class="form-control" id="admin_email" name="admin_email" required placeholder="admin@empresa.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="admin_password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="admin_password" name="admin_password" required minlength="8" placeholder="Mínimo 8 caracteres">
+                            <div class="form-text">Este será el usuario para acceder al panel de administración</div>
                         </div>
                     </div>
                     

@@ -1,4 +1,4 @@
-@extends('tenant.layout')
+@extends('tenant.admin.layout')
 
 @section('content')
 <div class="container">
@@ -99,7 +99,7 @@
 <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="{{ route('tenant.products.store') }}" method="POST">
+            <form action="{{ route('tenant.admin.products.store') }}" method="POST">
                 @csrf
                 
                 <div class="modal-header">

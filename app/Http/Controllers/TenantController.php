@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class TenantController extends Controller
 {
@@ -32,7 +34,10 @@ class TenantController extends Controller
         $request->validate([
             'empresa' => 'required|string|max:255|unique:tenants,id',
             'email' => 'required|email|max:255',
-            'domain' => 'required|string|max:255'
+            'domain' => 'required|string|max:255',
+            'admin_name' => 'required|string|max:255',
+            'admin_email' => 'required|email|max:255',
+            'admin_password' => 'required|string|min:8',
         ]);
 
         $tenant = Tenant::create([
@@ -42,7 +47,16 @@ class TenantController extends Controller
 
         $tenant->domains()->create(['domain' => $request->domain. '.localhost']);
 
-        return redirect()->route('tenants')->with('success', 'Tenant creado exitosamente');
+        // Crear usuario administrador dentro del tenant
+        $tenant->run(function () use ($request) {
+            User::create([
+                'name' => $request->admin_name,
+                'email' => $request->admin_email,
+                'password' => Hash::make($request->admin_password),
+            ]);
+        });
+
+        return redirect()->route('tenants')->with('success', 'Tenant y usuario administrador creados exitosamente');
     }
 
     /**
