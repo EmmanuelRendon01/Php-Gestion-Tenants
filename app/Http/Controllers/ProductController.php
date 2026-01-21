@@ -28,10 +28,21 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'category' => 'nullable|string|max:255',
-            'active' => 'boolean'
+            'active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
 
-        Product::create($request->all());
+        $data = $request->all();
+
+        // Manejar la subida de imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('products', $imageName, 'public');
+            $data['image'] = 'products/' . $imageName;
+        }
+
+        Product::create($data);
 
         return redirect()->route('tenant.admin.products')->with('success', 'Producto creado exitosamente');
     }
@@ -50,6 +61,7 @@ class ProductController extends Controller
             'stock' => $product->stock,
             'category' => $product->category ?? 'Sin categoría',
             'active' => $product->active ? 'Activo' : 'Inactivo',
+            'image' => $product->image ? asset('storage/' . $product->image) : null,
             'created_at' => $product->created_at->format('d/m/Y H:i'),
             'updated_at' => $product->updated_at->format('d/m/Y H:i')
         ]);
@@ -60,7 +72,17 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return response()->json($product);
+        return response()->json([
+            'id' => $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'sku' => $product->sku,
+            'price' => $product->price,
+            'stock' => $product->stock,
+            'category' => $product->category,
+            'active' => $product->active,
+            'image' => $product->image ? asset('storage/' . $product->image) : null
+        ]);
     }
 
     /**
@@ -75,19 +97,36 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'category' => 'nullable|string|max:255',
-            'active' => 'boolean'
+            'active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
 
-        $product->update($request->all());
+        $data = $request->except('image');
+
+        // Manejar la subida de nueva imagen
+        if ($request->hasFile('image')) {
+            // Eliminar imagen anterior si existe
+            if ($product->image && \Storage::disk('public')->exists($product->image)) {
+                \Storage::disk('public')->delete($product->image);
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('products', $imageName, 'public');
+            $data['image'] = 'products/' . $imageName;
+        }
+
+        $product->update($data);
 
         return redirect()->route('tenant.admin.products')->with('success', 'Producto actualizado exitosamente');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage (soft delete).
      */
     public function destroy(Product $product)
     {
+        // Soft delete - no elimina la imagen del storage
         $product->delete();
         return redirect()->route('tenant.admin.products')->with('success', 'Producto eliminado exitosamente');
     }

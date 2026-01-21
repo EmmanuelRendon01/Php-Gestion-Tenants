@@ -23,6 +23,13 @@
         @forelse ($products as $product)
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
+                    @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                    @else
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-image" style="font-size: 3rem;"></i>
+                        </div>
+                    @endif
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <h5 class="card-title mb-0">{{ $product->name }}</h5>

@@ -22,6 +22,9 @@ foreach (config('tenancy.central_domains') as $domain) {
             return view('welcome');
         });
 
+        // Rutas de autenticación de Fortify (incluye login, register, etc.)
+        // Estas rutas son registradas automáticamente por Fortify
+        
         // 2. Rutas protegidas por autenticación (Jetstream / Dashboard Central)
         Route::middleware([
             'auth:sanctum',

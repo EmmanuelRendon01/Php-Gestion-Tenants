@@ -42,7 +42,7 @@ window.deleteTenant = function(tenantId) {
 
 // Funciones para manejo de productos
 window.viewProduct = function(productId) {
-    fetch(`/products/${productId}`)
+    fetch(`/admin/products/${productId}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('view-product-name').textContent = data.name;
@@ -55,6 +55,18 @@ window.viewProduct = function(productId) {
             document.getElementById('view-product-created').textContent = data.created_at;
             document.getElementById('view-product-updated').textContent = data.updated_at;
             
+            // Mostrar/ocultar imagen
+            const imgElement = document.getElementById('view-product-image');
+            const noImageElement = document.getElementById('view-product-no-image');
+            if (data.image) {
+                imgElement.src = data.image;
+                imgElement.style.display = 'block';
+                noImageElement.style.display = 'none';
+            } else {
+                imgElement.style.display = 'none';
+                noImageElement.style.display = 'block';
+            }
+            
             const modal = new bootstrap.Modal(document.getElementById('viewProductModal'));
             modal.show();
         })
@@ -62,7 +74,7 @@ window.viewProduct = function(productId) {
 }
 
 window.editProduct = function(productId) {
-    fetch(`/products/${productId}/edit`)
+    fetch(`/admin/products/${productId}/edit`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('edit-name').value = data.name;
@@ -72,7 +84,16 @@ window.editProduct = function(productId) {
             document.getElementById('edit-stock').value = data.stock;
             document.getElementById('edit-category').value = data.category || '';
             document.getElementById('edit-active').checked = data.active;
-            document.getElementById('editProductForm').action = `/products/${productId}`;
+            document.getElementById('editProductForm').action = `/admin/products/${productId}`;
+            
+            // Mostrar preview de imagen actual
+            const imgPreview = document.getElementById('edit-product-image-preview');
+            if (data.image) {
+                imgPreview.src = data.image;
+                imgPreview.style.display = 'block';
+            } else {
+                imgPreview.style.display = 'none';
+            }
             
             const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
             modal.show();
@@ -83,10 +104,10 @@ window.editProduct = function(productId) {
 window.deleteProduct = function(productId) {
     // Obtener el nombre del producto desde la tabla
     const row = event.target.closest('tr');
-    const productName = row.querySelector('td:nth-child(2)').textContent;
+    const productName = row.querySelector('td:nth-child(3)').textContent;
     
     document.getElementById('delete-product-name').textContent = productName;
-    document.getElementById('deleteProductForm').action = `/products/${productId}`;
+    document.getElementById('deleteProductForm').action = `/admin/products/${productId}`;
     
     const modal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
     modal.show();

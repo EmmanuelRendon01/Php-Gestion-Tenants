@@ -28,6 +28,7 @@
                         <table class="table table-hover">
                             <thead class="table-light">
                                 <tr>
+                                    <th>Imagen</th>
                                     <th>SKU</th>
                                     <th>Nombre</th>
                                     <th>Categoría</th>
@@ -40,6 +41,15 @@
                             <tbody>
                                 @forelse ($products as $product)
                                     <tr>
+                                        <td>
+                                            @if($product->image)
+                                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                            @else
+                                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 10px;">
+                                                    Sin imagen
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td><code>{{ $product->sku }}</code></td>
                                         <td>{{ $product->name }}</td>
                                         <td>
@@ -78,7 +88,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center py-4">
+                                        <td colspan="8" class="text-center py-4">
                                             <p class="text-muted mb-0">No hay productos registrados.</p>
                                             <button type="button" class="btn btn-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#createProductModal">
                                                 Crear primer producto
@@ -99,7 +109,7 @@
 <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="{{ route('tenant.admin.products.store') }}" method="POST">
+            <form action="{{ route('tenant.admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="modal-header">
@@ -109,6 +119,12 @@
                 
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="image" class="form-label">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <div class="form-text">Formatos permitidos: JPG, PNG, GIF, WEBP (Máx. 2MB)</div>
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Nombre del Producto *</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -173,6 +189,11 @@
             
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-md-12 mb-3 text-center">
+                        <img id="view-product-image" src="" alt="Imagen del producto" class="img-fluid rounded" style="max-height: 200px; display: none;">
+                        <p id="view-product-no-image" class="text-muted" style="display: none;">Sin imagen</p>
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Nombre</label>
                         <p class="form-control-plaintext" id="view-product-name"></p>
@@ -231,7 +252,7 @@
 <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form id="editProductForm" method="POST">
+            <form id="editProductForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -242,6 +263,15 @@
                 
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="text-center mb-2">
+                                <img id="edit-product-image-preview" src="" alt="Imagen actual" class="img-thumbnail" style="max-height: 150px; display: none;">
+                            </div>
+                            <label for="edit-image" class="form-label">Cambiar Imagen</label>
+                            <input type="file" class="form-control" id="edit-image" name="image" accept="image/*">
+                            <div class="form-text">Dejar vacío para mantener la imagen actual</div>
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="edit-name" class="form-label">Nombre del Producto *</label>
                             <input type="text" class="form-control" id="edit-name" name="name" required>
