@@ -29,6 +29,11 @@ class TenantController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'empresa' => 'required|string|max:255|unique:tenants,id',
+            'email' => 'required|email|max:255',
+            'domain' => 'required|string|max:255'
+        ]);
 
         $tenant = Tenant::create([
             'id' => $request->empresa,
@@ -37,38 +42,63 @@ class TenantController extends Controller
 
         $tenant->domains()->create(['domain' => $request->domain. '.localhost']);
 
-        return redirect()->route('tenants');
+        return redirect()->route('tenants')->with('success', 'Tenant creado exitosamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Tenant $tenant)
     {
-        //
+        return response()->json([
+            'id' => $tenant->id,
+            'email' => $tenant->email,
+            'domain' => $tenant->domains->first()->domain ?? 'Sin dominio',
+            'created_at' => $tenant->created_at->format('d/m/Y H:i'),
+            'updated_at' => $tenant->updated_at->format('d/m/Y H:i')
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Tenant $tenant)
     {
-        //
+        return response()->json([
+            'id' => $tenant->id,
+            'email' => $tenant->email,
+            'domain' => str_replace('.localhost', '', $tenant->domains->first()->domain ?? '')
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Tenant $tenant)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|max:255',
+            'domain' => 'required|string|max:255'
+        ]);
+
+        $tenant->update([
+            'email' => $request->email
+        ]);
+
+        // Actualizar dominio
+        if ($tenant->domains->first()) {
+            $tenant->domains->first()->update(['domain' => $request->domain . '.localhost']);
+        }
+
+        return redirect()->route('tenants')->with('success', 'Tenant actualizado exitosamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Tenant $tenant)
     {
-        //
+        $tenant->delete();
+        return redirect()->route('tenants')->with('success', 'Tenant eliminado exitosamente');
     }
 }
